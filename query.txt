@@ -1,0 +1,26 @@
+
+CREATE TABLE Voters (votersID INTEGER PRIMARY KEY AUTOINCREMENT, firstName TEXT, lastName TEXT, gender TEXT, Age INTEGER);
+
+CREATE TABLE Politicians (polID INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, partai TEXT, location TEXT, gradeCurrent TEXT);
+
+CREATE TABLE Politicians_Voters (ID INTEGER PRIMARY KEY AUTOINCREMENT, polID INTEGER, votersID INTEGER, FOREIGN KEY (polID) REFERENCES Politicians (polID), FOREIGN KEY (votersID) REFERENCES Voters (votersID) );
+
+INSERT INTO Voters(firstName,lastName,gender,age) VALUES (,,,)
+
+INSERT INTO Politicians(name,partai,location,gradeCurrent) VALUES (,,,);
+
+INSERT INTO Politicians_Voters(polID,votersID) VALUES (,);
+
+UPDATE Voters SET ... WHERE ...;
+
+UPDATE Politicians SET ... WHERE ...;
+
+UPDATE Politicians_Voters SET ... WHERE ...;
+
+DELETE FROM Voters WHERE xxx;
+
+DELETE FROM Politicians WHERE xxx;
+
+DELETE FROM Politicians_Voters WHERE xxx;
+
+
