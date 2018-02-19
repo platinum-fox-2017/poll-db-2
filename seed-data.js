@@ -1,14 +1,13 @@
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs')
-const db = new sqlite3.Database('./poll.db', sqlite3.OPEN_READWRITE, (err) => {
+const db = new sqlite3.Database('./polldb-2.db', sqlite3.OPEN_READWRITE, (err) => {
   if(err) throw err
   console.log(`Connected to the candidates database`)
 })
 
-const politician = fs.readFileSync('./politicians.csv', 'utf8').split('\r\n')
-// console.log(politician)
-const voters = fs.readFileSync('./voters.csv', 'utf8').split('\r\n')
-const votes = fs.readFileSync('./votes.csv', 'utf8').split('\r\n')
+const politician = fs.readFileSync('./politicians.csv', 'utf8').trim().split('\r\n')
+const voters = fs.readFileSync('./voters.csv', 'utf8').trim().split('\r\n')
+const votes = fs.readFileSync('./votes.csv', 'utf8').trim().split('\r\n')
 
 db.serialize(() => {
   var stmt = db.prepare("INSERT INTO Politicians(name, party, location, grade_current) VALUES (?,?,?,?)");
