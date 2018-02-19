@@ -1,0 +1,70 @@
+CREATE TABLE politicians (
+  politicians_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  party TEXT,
+  location TEXT,
+  grade_current REAL
+);
+
+INSERT INTO politicians (politicians_id, name, party, location, grade_current)
+VALUES (politicians_id, name, party, location, grade_current)
+
+
+CREATE TABLE voter (
+  voter_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  first_name TEXT,
+  last_name TEXT,
+  gender TEXT,
+  age INTEGER
+);
+
+
+INSERT INTO voter (voter_id, first_name, last_name, gender, age)
+VALUES (voter_id, first_name, last_name, gender, age)
+
+
+CREATE TABLE votes (
+  votes_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  politicians_id INTEGER,
+  voter_id INTEGER,
+  FOREIGN KEY (politicians_id) REFERENCES politicians(politicians_id),
+  FOREIGN KEY (voter_id) REFERENCES voter(voter_id)
+);
+
+
+
+
+INSERT INTO votes (votes_id, politicians_id, voter_id)
+VALUES (votes_id, politicians_id, voter_id)
+
+
+
+
+SELECT COUNT(*) AS totalVotes, name
+FROM politicians
+JOIN votes ON politicians.politicians_id = votes.politicians_id
+WHERE politicians.name = 'Olympia Snowe';
+
+
+SELECT name, COUNT(*) AS totalVotes
+FROM politicians
+JOIN votes ON politicians.politicians_id = votes.politicians_id
+WHERE politicians.name LIKE '%Adam%'
+GROUP BY politicians.name
+
+
+
+SELECT COUNT(*) AS totalVotes, name, party, location
+FROM politicians
+JOIN votes ON politicians.politicians_id = votes.politicians_id
+GROUP BY politicians.name
+ORDER BY totalVotes DESC
+LIMIT 3
+
+
+
+SELECT voter.first_name, voter.last_name, voter.gender, voter.age
+FROM politicians
+JOIN votes ON politicians.politicians_id = votes.politicians_id
+JOIN voter ON votes.voter_id = voter.voter_id
+WHERE politicians.name = 'Olympia Snowe';
