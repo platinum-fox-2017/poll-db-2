@@ -9,14 +9,14 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./poll.db');
 
 db.serialize(function() {
-    // db.all(`SELECT name, location, grade_current, (SELECT COUNT(*) FROM Votes WHERE politicianId = Politicians.id) AS totalVote
-    // FROM Politicians
-    // WHERE grade_current < 9
-    // ORDER BY 4
-    // `, function(err, rows) {
-    //     if(err) console.log(err);
-    //     else console.log(rows)
-    // });
+    db.all(`SELECT name, location, grade_current, (SELECT COUNT(*) FROM Votes WHERE politicianId = Politicians.id) AS totalVote
+    FROM Politicians
+    WHERE grade_current < 9
+    ORDER BY 4
+    `, function(err, rows) {
+        if(err) console.log(err);
+        else console.log(rows)
+    });
 
     db.all(`
     SELECT totalVote, name, first_name||' '||last_name AS voterName, gender
@@ -40,17 +40,18 @@ db.serialize(function() {
         else console.log(rows)
     });
 
-    // db.all(`
-    // SELECT Count(*) AS totalVote, first_name||' '||last_name AS name, gender, age
-    // FROM Votes
-    // LEFT JOIN Voters
-    //     ON Voters.id = Votes.voterId
-    // GROUP BY 2
-    // ORDER BY 1 DESC
-    // `, function(err, rows) {
-    //     if(err) console.log(err);
-    //     else console.log(rows)
-    // });
+    db.each(`
+    SELECT Count(*) AS totalVote, first_name||' '||last_name AS name, gender, age
+    FROM Votes
+    LEFT JOIN Voters
+        ON Voters.id = Votes.voterId
+    GROUP BY 2
+    HAVING totalVote > 1
+    ORDER BY 1 DESC
+    `, function(err, rows) {
+        if(err) console.log(err);
+        else console.log(rows)
+    });
 });
 
 db.close();
