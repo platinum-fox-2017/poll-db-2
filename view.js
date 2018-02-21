@@ -18,14 +18,14 @@ db.serialize(function(){
   // });
 
   // 2. 3 politisi dengan vote terbanyak dan siapa saja yang memilih politisi tersebut
-  db.all(`SELECT count(*) AS totalVote, name AS politicianName, firstName AS voterName,
-  gender
-  FROM Votes
-  LEFT JOIN Politicians
-    ON Votes.politicianId = Politicians.id
-  LEFT JOIN Voters
-    ON Votes.voterId = Voters.id
-  ORDER BY totalVote DESC`, function(err,rows){
+  db.all(`SELECT totalVote, politicianName, firstName||' '||lastName AS voterName, gender, Three.id
+  FROM (SELECT count(*) AS totalVote, name AS politicianName, Politicians.id FROM Votes
+  JOIN Politicians ON Votes.politicianId = Politicians.id GROUP BY name ORDER BY totalVote DESC
+  LIMIT 3) AS Three
+  JOIN Votes ON Votes.politicianId = Three.id
+  JOIN Voters ON Voters.id = Votes.voterId
+  ORDER BY Three.id DESC`
+  , function(err,rows){
     if(err){
       console.log(err);
     } else {
